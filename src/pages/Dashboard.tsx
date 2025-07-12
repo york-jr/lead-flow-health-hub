@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -43,8 +42,8 @@ const Dashboard = () => {
   const [filteredLeads, setFilteredLeads] = useState<Lead[]>([]);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterClassificacao, setFilterClassificacao] = useState("");
-  const [filterStatus, setFilterStatus] = useState("");
+  const [filterClassificacao, setFilterClassificacao] = useState("all");
+  const [filterStatus, setFilterStatus] = useState("all");
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -57,9 +56,9 @@ const Dashboard = () => {
     setCurrentUser(JSON.parse(user));
 
     const storedLeads = JSON.parse(localStorage.getItem("leads") || "[]");
-    const leadsWithStatus = storedLeads.map((lead: Lead) => ({
+    const leadsWithStatus: Lead[] = storedLeads.map((lead: any) => ({
       ...lead,
-      status: lead.status || "novo"
+      status: (lead.status as Lead["status"]) || "novo"
     }));
     setLeads(leadsWithStatus);
     setFilteredLeads(leadsWithStatus);
@@ -76,11 +75,11 @@ const Dashboard = () => {
       );
     }
 
-    if (filterClassificacao) {
+    if (filterClassificacao !== "all") {
       filtered = filtered.filter(lead => lead.classificacao === filterClassificacao);
     }
 
-    if (filterStatus) {
+    if (filterStatus !== "all") {
       filtered = filtered.filter(lead => lead.status === filterStatus);
     }
 
@@ -92,7 +91,7 @@ const Dashboard = () => {
     navigate("/");
   };
 
-  const updateLeadStatus = (leadId: string, newStatus: string, responsavel?: string) => {
+  const updateLeadStatus = (leadId: string, newStatus: Lead["status"], responsavel?: string) => {
     const updatedLeads = leads.map(lead => 
       lead.id === leadId 
         ? { ...lead, status: newStatus, responsavel: responsavel || currentUser?.nome }
@@ -237,7 +236,7 @@ const Dashboard = () => {
                   <SelectValue placeholder="Classificação" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todas</SelectItem>
+                  <SelectItem value="all">Todas</SelectItem>
                   <SelectItem value="quente">Quente</SelectItem>
                   <SelectItem value="morno">Morno</SelectItem>
                   <SelectItem value="frio">Frio</SelectItem>
@@ -249,7 +248,7 @@ const Dashboard = () => {
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todos</SelectItem>
+                  <SelectItem value="all">Todos</SelectItem>
                   <SelectItem value="novo">Novo</SelectItem>
                   <SelectItem value="contatado">Contatado</SelectItem>
                   <SelectItem value="interesse">Com Interesse</SelectItem>
@@ -341,7 +340,7 @@ const Dashboard = () => {
                       </div>
                       
                       <div className="flex gap-2">
-                        <Select onValueChange={(value) => updateLeadStatus(lead.id, value)}>
+                        <Select onValueChange={(value) => updateLeadStatus(lead.id, value as Lead["status"])}>
                           <SelectTrigger className="w-40">
                             <SelectValue placeholder="Alterar status" />
                           </SelectTrigger>
