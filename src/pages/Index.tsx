@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Heart, Shield, Users, Star, Phone, Mail, MapPin } from "lucide-react";
+import { Heart, Shield, Users, Star, Phone, Mail, MapPin, Building2, Headphones } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Index = () => {
@@ -106,17 +105,17 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-orange-50 to-green-50">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm shadow-sm border-b">
+      <header className="bg-white/90 backdrop-blur-sm shadow-sm border-b">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <Shield className="h-8 w-8 text-blue-600" />
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 via-orange-500 to-green-600 bg-clip-text text-transparent">
               HealthLead Pro
             </span>
           </div>
-          <Button onClick={() => navigate("/login")} variant="outline">
+          <Button onClick={() => navigate("/login")} variant="outline" className="border-orange-200 hover:bg-orange-50">
             Área do Cliente
           </Button>
         </div>
@@ -124,26 +123,66 @@ const Index = () => {
 
       {/* Hero Section */}
       <section className="py-20 px-4">
-        <div className="container mx-auto text-center max-w-4xl">
-          <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+        <div className="container mx-auto text-center max-w-5xl">
+          <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-orange-500 to-green-600 bg-clip-text text-transparent">
             Encontre o Plano de Saúde Ideal para Você
           </h1>
-          <p className="text-xl text-gray-600 mb-8">
+          <p className="text-xl text-gray-600 mb-12">
             Compare preços, cobertura e encontre o melhor plano de saúde em menos de 2 minutos
           </p>
           
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
-            <div className="flex items-center justify-center space-x-2 text-blue-600">
-              <Heart className="h-6 w-6" />
-              <span className="font-semibold">Cobertura Nacional</span>
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 p-8 text-white transform hover:scale-105 transition-all duration-300">
+              <div className="absolute inset-0 bg-black/10"></div>
+              <div className="relative z-10">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/20 flex items-center justify-center">
+                  <MapPin className="h-8 w-8" />
+                </div>
+                <h3 className="text-xl font-bold mb-2">Cobertura Nacional</h3>
+                <p className="text-blue-100">Atendimento em todo território brasileiro com rede credenciada</p>
+              </div>
             </div>
-            <div className="flex items-center justify-center space-x-2 text-green-600">
-              <Users className="h-6 w-6" />
-              <span className="font-semibold">+50 Operadoras</span>
+
+            <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 p-8 text-white transform hover:scale-105 transition-all duration-300">
+              <div className="absolute inset-0 bg-black/10"></div>
+              <div className="relative z-10">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/20 flex items-center justify-center">
+                  <Building2 className="h-8 w-8" />
+                </div>
+                <h3 className="text-xl font-bold mb-2">+50 Operadoras</h3>
+                <p className="text-orange-100">Parceria com as principais operadoras do mercado nacional</p>
+              </div>
             </div>
-            <div className="flex items-center justify-center space-x-2 text-purple-600">
-              <Star className="h-6 w-6" />
-              <span className="font-semibold">Atendimento 5⭐</span>
+
+            <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-green-500 to-green-600 p-8 text-white transform hover:scale-105 transition-all duration-300">
+              <div className="absolute inset-0 bg-black/10"></div>
+              <div className="relative z-10">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/20 flex items-center justify-center">
+                  <Headphones className="h-8 w-8" />
+                </div>
+                <h3 className="text-xl font-bold mb-2">Atendimento 5⭐</h3>
+                <p className="text-green-100">Suporte especializado e atendimento personalizado</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Stats Section */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-blue-600 mb-1">500K+</div>
+              <div className="text-gray-600">Clientes Atendidos</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-orange-500 mb-1">98%</div>
+              <div className="text-gray-600">Satisfação</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-green-600 mb-1">24h</div>
+              <div className="text-gray-600">Resposta Rápida</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-purple-600 mb-1">15+</div>
+              <div className="text-gray-600">Anos no Mercado</div>
             </div>
           </div>
         </div>
@@ -152,16 +191,16 @@ const Index = () => {
       {/* Form Section */}
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-2xl">
-          <Card className="shadow-2xl border-0 bg-white/90 backdrop-blur-sm">
-            <CardHeader className="text-center">
-              <CardTitle className="text-3xl font-bold text-gray-800">
+          <Card className="shadow-2xl border-0 bg-white/95 backdrop-blur-sm">
+            <CardHeader className="text-center bg-gradient-to-r from-blue-600 via-orange-500 to-green-600 text-white rounded-t-lg">
+              <CardTitle className="text-3xl font-bold">
                 Receba sua Cotação Gratuita
               </CardTitle>
-              <CardDescription className="text-lg">
+              <CardDescription className="text-lg text-white/90">
                 Preencha os dados abaixo e receba propostas personalizadas
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-8">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
@@ -291,14 +330,14 @@ const Index = () => {
 
                 <Button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white py-3 text-lg font-semibold"
+                  className="w-full bg-gradient-to-r from-blue-600 via-orange-500 to-green-600 hover:from-blue-700 hover:via-orange-600 hover:to-green-700 text-white py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
                   disabled={isLoading}
                 >
-                  {isLoading ? "Processando..." : "Receber Cotação Gratuita"}
+                  {isLoading ? "Processando..." : "🚀 Receber Cotação Gratuita"}
                 </Button>
 
                 <p className="text-sm text-gray-500 text-center">
-                  Seus dados estão seguros conosco. Não compartilhamos com terceiros.
+                  🔒 Seus dados estão seguros conosco. Não compartilhamos com terceiros.
                 </p>
               </form>
             </CardContent>
@@ -307,39 +346,131 @@ const Index = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 px-4 bg-gradient-to-r from-blue-600 to-green-600">
+      <section className="py-16 px-4 bg-gradient-to-r from-blue-600 via-orange-500 to-green-600">
         <div className="container mx-auto text-center text-white">
-          <h2 className="text-3xl font-bold mb-12">Por que escolher nosso serviço?</h2>
+          <h2 className="text-4xl font-bold mb-4">Por que escolher nosso serviço?</h2>
+          <p className="text-xl mb-12 text-white/90">Mais de 15 anos conectando pessoas aos melhores planos de saúde</p>
+          
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="space-y-4">
-              <Phone className="h-12 w-12 mx-auto" />
-              <h3 className="text-xl font-semibold">Atendimento Personalizado</h3>
-              <p>Consultores especializados para ajudar na sua escolha</p>
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 hover:bg-white/20 transition-all duration-300">
+              <Phone className="h-16 w-16 mx-auto mb-4" />
+              <h3 className="text-2xl font-semibold mb-4">Atendimento Personalizado</h3>
+              <p className="text-lg text-white/90">Consultores especializados para ajudar na sua escolha ideal</p>
             </div>
-            <div className="space-y-4">
-              <Mail className="h-12 w-12 mx-auto" />
-              <h3 className="text-xl font-semibold">Resposta Rápida</h3>
-              <p>Cotações em até 24 horas direto no seu e-mail</p>
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 hover:bg-white/20 transition-all duration-300">
+              <Mail className="h-16 w-16 mx-auto mb-4" />
+              <h3 className="text-2xl font-semibold mb-4">Resposta Rápida</h3>
+              <p className="text-lg text-white/90">Cotações em até 24 horas direto no seu e-mail</p>
             </div>
-            <div className="space-y-4">
-              <MapPin className="h-12 w-12 mx-auto" />
-              <h3 className="text-xl font-semibold">Cobertura Nacional</h3>
-              <p>Planos disponíveis em todo o território brasileiro</p>
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 hover:bg-white/20 transition-all duration-300">
+              <Star className="h-16 w-16 mx-auto mb-4" />
+              <h3 className="text-2xl font-semibold mb-4">Melhores Preços</h3>
+              <p className="text-lg text-white/90">Negociamos os melhores valores do mercado para você</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-16 px-4 bg-gray-50">
+        <div className="container mx-auto max-w-6xl">
+          <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-blue-600 via-orange-500 to-green-600 bg-clip-text text-transparent">
+            O que nossos clientes falam
+          </h2>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
+              <div className="flex items-center mb-4">
+                <div className="flex text-orange-400">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-5 w-5 fill-current" />
+                  ))}
+                </div>
+              </div>
+              <p className="text-gray-600 mb-4 italic">"Excelente atendimento! Encontrei o plano perfeito para minha família."</p>
+              <p className="font-semibold text-gray-800">- Maria Silva</p>
+            </div>
+            
+            <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
+              <div className="flex items-center mb-4">
+                <div className="flex text-orange-400">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-5 w-5 fill-current" />
+                  ))}
+                </div>
+              </div>
+              <p className="text-gray-600 mb-4 italic">"Processo super rápido e transparente. Recomendo!"</p>
+              <p className="font-semibold text-gray-800">- João Santos</p>
+            </div>
+            
+            <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
+              <div className="flex items-center mb-4">
+                <div className="flex text-orange-400">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-5 w-5 fill-current" />
+                  ))}
+                </div>
+              </div>
+              <p className="text-gray-600 mb-4 italic">"Economizei muito com a ajuda da equipe. Muito obrigada!"</p>
+              <p className="font-semibold text-gray-800">- Ana Costa</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-8 px-4">
-        <div className="container mx-auto text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <Shield className="h-6 w-6" />
-            <span className="text-lg font-bold">HealthLead Pro</span>
+      <footer className="bg-gray-900 text-white py-12 px-4">
+        <div className="container mx-auto">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <Shield className="h-6 w-6 text-orange-400" />
+                <span className="text-lg font-bold">HealthLead Pro</span>
+              </div>
+              <p className="text-gray-400">
+                Conectando você aos melhores planos de saúde do Brasil.
+              </p>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-semibold mb-4 text-orange-400">Serviços</h3>
+              <ul className="space-y-2 text-gray-400">
+                <li>Planos Individuais</li>
+                <li>Planos Empresariais</li>
+                <li>Planos por Adesão</li>
+                <li>Consultoria Gratuita</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-semibold mb-4 text-orange-400">Contato</h3>
+              <ul className="space-y-2 text-gray-400">
+                <li className="flex items-center space-x-2">
+                  <Phone className="h-4 w-4" />
+                  <span>(11) 4000-0000</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <Mail className="h-4 w-4" />
+                  <span>contato@healthlead.com.br</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-semibold mb-4 text-orange-400">Horários</h3>
+              <p className="text-gray-400">
+                Segunda à Sexta: 8h às 18h<br />
+                Sábado: 8h às 12h<br />
+                Domingo: Fechado
+              </p>
+            </div>
           </div>
-          <p className="text-gray-400">
-            © 2024 HealthLead Pro. Todos os direitos reservados.
-          </p>
+          
+          <div className="border-t border-gray-700 pt-8 text-center">
+            <p className="text-gray-400">
+              © 2024 HealthLead Pro. Todos os direitos reservados.
+            </p>
+          </div>
         </div>
       </footer>
     </div>
