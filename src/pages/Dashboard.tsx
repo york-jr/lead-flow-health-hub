@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,15 +11,13 @@ import {
   Shield, 
   Users, 
   TrendingUp, 
-  Phone, 
-  Mail, 
-  MapPin, 
   LogOut,
   Search,
   Filter,
   Download
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { LeadsTable } from "@/components/dashboard/LeadsTable";
 
 interface Lead {
   id: string;
@@ -106,26 +105,6 @@ const Dashboard = () => {
     });
   };
 
-  const getClassificacaoColor = (classificacao: string) => {
-    switch (classificacao) {
-      case "quente": return "bg-red-100 text-red-800 border-red-200";
-      case "morno": return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "frio": return "bg-blue-100 text-blue-800 border-blue-200";
-      default: return "bg-gray-100 text-gray-800 border-gray-200";
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "novo": return "bg-green-100 text-green-800 border-green-200";
-      case "contatado": return "bg-blue-100 text-blue-800 border-blue-200";
-      case "interesse": return "bg-purple-100 text-purple-800 border-purple-200";
-      case "fechado": return "bg-emerald-100 text-emerald-800 border-emerald-200";
-      case "perdido": return "bg-gray-100 text-gray-800 border-gray-200";
-      default: return "bg-gray-100 text-gray-800 border-gray-200";
-    }
-  };
-
   const leadsPorClassificacao = {
     quente: leads.filter(l => l.classificacao === "quente").length,
     morno: leads.filter(l => l.classificacao === "morno").length,
@@ -138,6 +117,36 @@ const Dashboard = () => {
     interesse: leads.filter(l => l.status === "interesse").length,
     fechado: leads.filter(l => l.status === "fechado").length,
     perdido: leads.filter(l => l.status === "perdido").length
+  };
+
+  const handleExportLeads = () => {
+    const csvContent = [
+      ['Nome', 'Email', 'Telefone', 'Idade', 'Cidade', 'Renda', 'Tipo Plano', 'Urgência', 'Classificação', 'Status', 'Data Captura'],
+      ...filteredLeads.map(lead => [
+        lead.nome,
+        lead.email,
+        lead.telefone,
+        lead.idade,
+        lead.cidade,
+        lead.renda,
+        lead.tipoPlano,
+        lead.urgencia,
+        lead.classificacao,
+        lead.status || 'novo',
+        new Date(lead.dataCaptura).toLocaleDateString('pt-BR')
+      ])
+    ].map(row => row.join(',')).join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'leads.csv';
+    link.click();
+
+    toast({
+      title: "Leads exportados",
+      description: "Os leads foram exportados com sucesso.",
+    });
   };
 
   if (!currentUser) {
@@ -216,11 +225,11 @@ const Dashboard = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Filter className="h-5 w-5" />
-              Filtros
+              Filtros e Ações
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid md:grid-cols-4 gap-4">
+            <div className="grid md:grid-cols-5 gap-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
@@ -257,10 +266,14 @@ const Dashboard = () => {
                 </SelectContent>
               </Select>
 
-              <Button variant="outline" className="flex items-center gap-2">
+              <Button onClick={handleExportLeads} variant="outline" className="flex items-center gap-2">
                 <Download className="h-4 w-4" />
-                Exportar
+                Exportar CSV
               </Button>
+
+              <div className="text-sm text-gray-600 flex items-center">
+                <strong>{filteredLeads.length}</strong>&nbsp;leads encontrados
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -270,99 +283,15 @@ const Dashboard = () => {
           <CardHeader>
             <CardTitle>Leads Capturados</CardTitle>
             <CardDescription>
-              Gerencie e distribua seus leads de plano de saúde
+              Gerencie e acompanhe todos os seus leads de plano de saúde
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {filteredLeads.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                  Nenhum lead encontrado com os filtros aplicados.
-                </div>
-              ) : (
-                filteredLeads.map((lead) => (
-                  <Card key={lead.id} className="p-4">
-                    <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <h3 className="font-semibold text-lg">{lead.nome}</h3>
-                        <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
-                          <div className="flex items-center gap-1">
-                            <Mail className="h-4 w-4" />
-                            {lead.email}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Phone className="h-4 w-4" />
-                            {lead.telefone}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <MapPin className="h-4 w-4" />
-                            {lead.cidade}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <Badge className={getClassificacaoColor(lead.classificacao)}>
-                          {lead.classificacao.toUpperCase()}
-                        </Badge>
-                        <Badge className={getStatusColor(lead.status || "novo")}>
-                          {(lead.status || "novo").toUpperCase()}
-                        </Badge>
-                      </div>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 gap-4 mb-4 text-sm">
-                      <div>
-                        <strong>Idade:</strong> {lead.idade} anos
-                      </div>
-                      <div>
-                        <strong>Renda:</strong> R$ {lead.renda}
-                      </div>
-                      <div>
-                        <strong>Tipo de Plano:</strong> {lead.tipoPlano}
-                      </div>
-                      <div>
-                        <strong>Urgência:</strong> {lead.urgencia}
-                      </div>
-                    </div>
-
-                    {lead.comentarios && (
-                      <div className="mb-4 p-3 bg-gray-50 rounded text-sm">
-                        <strong>Comentários:</strong> {lead.comentarios}
-                      </div>
-                    )}
-
-                    <div className="flex justify-between items-center">
-                      <div className="text-xs text-gray-500">
-                        Capturado em: {new Date(lead.dataCaptura).toLocaleDateString("pt-BR")}
-                        {lead.responsavel && (
-                          <span className="ml-4">Responsável: {lead.responsavel}</span>
-                        )}
-                      </div>
-                      
-                      <div className="flex gap-2">
-                        <Select onValueChange={(value) => updateLeadStatus(lead.id, value as Lead["status"])}>
-                          <SelectTrigger className="w-40">
-                            <SelectValue placeholder="Alterar status" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="novo">Novo</SelectItem>
-                            <SelectItem value="contatado">Contatado</SelectItem>
-                            <SelectItem value="interesse">Com Interesse</SelectItem>
-                            <SelectItem value="fechado">Fechado</SelectItem>
-                            <SelectItem value="perdido">Perdido</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        
-                        <Button size="sm" variant="outline">
-                          <Phone className="h-4 w-4 mr-1" />
-                          Ligar
-                        </Button>
-                      </div>
-                    </div>
-                  </Card>
-                ))
-              )}
-            </div>
+            <LeadsTable
+              leads={filteredLeads}
+              onUpdateStatus={updateLeadStatus}
+              currentUser={currentUser}
+            />
           </CardContent>
         </Card>
       </div>
