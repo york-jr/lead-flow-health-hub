@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -125,10 +126,16 @@ const Index = () => {
       <section className="py-20 px-4">
         <div className="container mx-auto text-center max-w-5xl">
           <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-orange-500 to-green-600 bg-clip-text text-transparent">
-            Encontre o Plano de Saúde Ideal para Você
+            Encontre o Plano de Saúde Ideal para Você e Sua Família
           </h1>
-          <p className="text-xl text-gray-600 mb-12">
-            Compare preços, cobertura e encontre o melhor plano de saúde em menos de 2 minutos
+          <p className="text-xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed">
+            Descubra o plano de saúde perfeito que se adapta ao seu perfil, orçamento e necessidades específicas. 
+            Nossa plataforma inteligente analisa mais de 200 opções de planos das principais operadoras do Brasil, 
+            comparando preços, cobertura, rede credenciada e benefícios exclusivos para encontrar exatamente o que você precisa.
+          </p>
+          <p className="text-lg text-gray-500 mb-12 max-w-3xl mx-auto">
+            Com tecnologia avançada de matching e consultores especialistas, garantimos que você tome a decisão mais acertada 
+            para proteger sua saúde e de quem você ama, sem pagar mais por isso.
           </p>
           
           <div className="grid md:grid-cols-3 gap-8 mb-16">
