@@ -16,9 +16,10 @@ const Index = () => {
     email: "",
     telefone: "",
     idade: "",
-    renda: "",
+    bairro: "",
     cidade: "",
     tipoPlano: "",
+    coParticipacao: "",
     urgencia: "",
     comentarios: ""
   });
@@ -39,15 +40,13 @@ const Index = () => {
     else if (idade < 45) pontuacao += 2;
     else pontuacao += 1;
 
-    // Renda
-    const renda = parseFloat(formData.renda);
-    if (renda > 5000) pontuacao += 3;
-    else if (renda > 2000) pontuacao += 2;
+    // Tipo de plano
+    if (formData.tipoPlano === "individual") pontuacao += 3;
+    else if (formData.tipoPlano === "pessoa-juridica") pontuacao += 2;
     else pontuacao += 1;
 
-    // Tipo de plano
-    if (formData.tipoPlano === "premium") pontuacao += 3;
-    else if (formData.tipoPlano === "completo") pontuacao += 2;
+    // Co-participação (sem co-participação = mais pontos)
+    if (formData.coParticipacao === "sem") pontuacao += 2;
     else pontuacao += 1;
 
     // Urgência
@@ -88,9 +87,10 @@ const Index = () => {
         email: "",
         telefone: "",
         idade: "",
-        renda: "",
+        bairro: "",
         cidade: "",
         tipoPlano: "",
+        coParticipacao: "",
         urgencia: "",
         comentarios: ""
       });
@@ -214,12 +214,11 @@ const Index = () => {
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="renda">Renda Mensal (R$) *</Label>
+                    <Label htmlFor="bairro">Bairro *</Label>
                     <Input
-                      id="renda"
-                      type="number"
-                      value={formData.renda}
-                      onChange={(e) => handleInputChange("renda", e.target.value)}
+                      id="bairro"
+                      value={formData.bairro}
+                      onChange={(e) => handleInputChange("bairro", e.target.value)}
                       required
                       className="mt-1"
                     />
@@ -244,26 +243,39 @@ const Index = () => {
                         <SelectValue placeholder="Selecione o tipo" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="basico">Básico</SelectItem>
-                        <SelectItem value="completo">Completo</SelectItem>
-                        <SelectItem value="premium">Premium</SelectItem>
+                        <SelectItem value="individual">Individual</SelectItem>
+                        <SelectItem value="pessoa-juridica">Pessoa Jurídica</SelectItem>
+                        <SelectItem value="adesao">Adesão</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div>
-                    <Label htmlFor="urgencia">Quando precisa contratar? *</Label>
-                    <Select onValueChange={(value) => handleInputChange("urgencia", value)}>
+                    <Label htmlFor="coParticipacao">Co-participação *</Label>
+                    <Select onValueChange={(value) => handleInputChange("coParticipacao", value)}>
                       <SelectTrigger className="mt-1">
-                        <SelectValue placeholder="Selecione o prazo" />
+                        <SelectValue placeholder="Selecione uma opção" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="imediata">Imediatamente</SelectItem>
-                        <SelectItem value="1mes">Em até 1 mês</SelectItem>
-                        <SelectItem value="3meses">Em até 3 meses</SelectItem>
-                        <SelectItem value="futuro">No futuro</SelectItem>
+                        <SelectItem value="com">Com Co-participação</SelectItem>
+                        <SelectItem value="sem">Sem Co-participação</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="urgencia">Quando precisa contratar? *</Label>
+                  <Select onValueChange={(value) => handleInputChange("urgencia", value)}>
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Selecione o prazo" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="imediata">Imediatamente</SelectItem>
+                      <SelectItem value="1mes">Em até 1 mês</SelectItem>
+                      <SelectItem value="3meses">Em até 3 meses</SelectItem>
+                      <SelectItem value="futuro">No futuro</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div>
