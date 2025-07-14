@@ -33,7 +33,7 @@ interface Lead {
   email: string;
   telefone: string;
   idade: string;
-  bairro: string;
+  bairro?: string;
   cidade: string;
   tipoPlano: string;
   urgencia: string;
