@@ -91,28 +91,26 @@ const Dashboard = () => {
   };
 
   const updateLeadStatus = (leadId: string, newStatus: Lead["status"], responsavel?: string) => {
-    const updatedLeads = leads.map(lead => 
-      lead.id === leadId 
-        ? { 
-            ...lead, 
-            status: newStatus, 
-            responsavel: responsavel || currentUser?.nome,
-            dataStatusChange: new Date().toISOString()
-          }
-        : lead
-    );
-    
-    // Se o status foi alterado para contatado, interesse ou fechado, mover para histórico do usuário
     const targetStatuses = ["contatado", "interesse", "fechado"];
+    
     if (newStatus && targetStatuses.includes(newStatus)) {
-      const updatedLead = updatedLeads.find(lead => lead.id === leadId);
-      if (updatedLead && currentUser) {
+      // Encontrar o lead que será atualizado
+      const leadToUpdate = leads.find(lead => lead.id === leadId);
+      if (leadToUpdate && currentUser) {
+        // Atualizar o lead com as novas informações
+        const updatedLead = {
+          ...leadToUpdate,
+          status: newStatus,
+          responsavel: currentUser.nome,
+          dataStatusChange: new Date().toISOString()
+        };
+
         // Adicionar ao histórico do usuário atual
         const currentHistory = JSON.parse(localStorage.getItem(`lead_history_${currentUser.id}`) || "[]");
         const newHistory = [updatedLead, ...currentHistory];
         localStorage.setItem(`lead_history_${currentUser.id}`, JSON.stringify(newHistory));
         
-        // Remover da lista principal de leads (ficará invisível para outros usuários)
+        // Remover da lista principal de leads
         const leadsWithoutUpdated = leads.filter(lead => lead.id !== leadId);
         setLeads(leadsWithoutUpdated);
         localStorage.setItem("leads", JSON.stringify(leadsWithoutUpdated));
@@ -124,6 +122,18 @@ const Dashboard = () => {
         return;
       }
     }
+    
+    // Para outros status (novo, perdido), apenas atualizar sem mover
+    const updatedLeads = leads.map(lead => 
+      lead.id === leadId 
+        ? { 
+            ...lead, 
+            status: newStatus, 
+            responsavel: responsavel || currentUser?.nome,
+            dataStatusChange: new Date().toISOString()
+          }
+        : lead
+    );
     
     setLeads(updatedLeads);
     localStorage.setItem("leads", JSON.stringify(updatedLeads));

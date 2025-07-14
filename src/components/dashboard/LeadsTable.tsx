@@ -42,6 +42,7 @@ interface Lead {
   dataCaptura: string;
   status?: "novo" | "contatado" | "interesse" | "fechado" | "perdido";
   responsavel?: string;
+  dataStatusChange?: string;
 }
 
 interface LeadsTableProps {
