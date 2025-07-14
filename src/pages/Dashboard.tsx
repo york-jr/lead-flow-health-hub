@@ -18,7 +18,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import { LeadsTable } from "@/components/dashboard/LeadsTable";
 import { LeadHistory } from "@/components/dashboard/LeadHistory";
-import { DashboardCharts } from "@/components/dashboard/DashboardCharts";
 
 interface Lead {
   id: string;
@@ -249,9 +248,6 @@ const Dashboard = () => {
             </CardContent>
           </Card>
         </div>
-
-        {/* Gráficos */}
-        <DashboardCharts leads={leads} />
 
         {/* Filters */}
         <Card className="mb-8">
