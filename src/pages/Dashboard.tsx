@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,6 +17,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { LeadsTable } from "@/components/dashboard/LeadsTable";
+import { LeadHistory } from "@/components/dashboard/LeadHistory";
 
 interface Lead {
   id: string;
@@ -93,9 +93,38 @@ const Dashboard = () => {
   const updateLeadStatus = (leadId: string, newStatus: Lead["status"], responsavel?: string) => {
     const updatedLeads = leads.map(lead => 
       lead.id === leadId 
-        ? { ...lead, status: newStatus, responsavel: responsavel || currentUser?.nome }
+        ? { 
+            ...lead, 
+            status: newStatus, 
+            responsavel: responsavel || currentUser?.nome,
+            dataStatusChange: new Date().toISOString()
+          }
         : lead
     );
+    
+    // Se o status foi alterado para contatado, interesse ou fechado, mover para histórico do usuário
+    const targetStatuses = ["contatado", "interesse", "fechado"];
+    if (newStatus && targetStatuses.includes(newStatus)) {
+      const updatedLead = updatedLeads.find(lead => lead.id === leadId);
+      if (updatedLead && currentUser) {
+        // Adicionar ao histórico do usuário atual
+        const currentHistory = JSON.parse(localStorage.getItem(`lead_history_${currentUser.id}`) || "[]");
+        const newHistory = [updatedLead, ...currentHistory];
+        localStorage.setItem(`lead_history_${currentUser.id}`, JSON.stringify(newHistory));
+        
+        // Remover da lista principal de leads (ficará invisível para outros usuários)
+        const leadsWithoutUpdated = leads.filter(lead => lead.id !== leadId);
+        setLeads(leadsWithoutUpdated);
+        localStorage.setItem("leads", JSON.stringify(leadsWithoutUpdated));
+        
+        toast({
+          title: "Lead movido para histórico",
+          description: `O lead ${updatedLead.nome} foi movido para seu histórico pessoal.`,
+        });
+        return;
+      }
+    }
+    
     setLeads(updatedLeads);
     localStorage.setItem("leads", JSON.stringify(updatedLeads));
     
@@ -278,22 +307,34 @@ const Dashboard = () => {
           </CardContent>
         </Card>
 
-        {/* Leads Table */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Leads Capturados</CardTitle>
-            <CardDescription>
-              Gerencie e acompanhe todos os seus leads de plano de saúde
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <LeadsTable
-              leads={filteredLeads}
-              onUpdateStatus={updateLeadStatus}
-              currentUser={currentUser}
-            />
-          </CardContent>
-        </Card>
+        <Tabs defaultValue="leads" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="leads">Leads Ativos</TabsTrigger>
+            <TabsTrigger value="history">Meu Histórico</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="leads" className="space-y-0">
+            <Card>
+              <CardHeader>
+                <CardTitle>Leads Capturados</CardTitle>
+                <CardDescription>
+                  Gerencie e acompanhe todos os seus leads de plano de saúde
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <LeadsTable
+                  leads={filteredLeads}
+                  onUpdateStatus={updateLeadStatus}
+                  currentUser={currentUser}
+                />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="history" className="space-y-0">
+            <LeadHistory currentUser={currentUser} />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
