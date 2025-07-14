@@ -33,7 +33,7 @@ interface Lead {
   email: string;
   telefone: string;
   idade: string;
-  renda: string;
+  bairro: string;
   cidade: string;
   tipoPlano: string;
   urgencia: string;
@@ -103,7 +103,7 @@ export const LeadsTable = ({ leads, onUpdateStatus, currentUser }: LeadsTablePro
             <TableRow>
               <TableHead>Nome</TableHead>
               <TableHead>Contato</TableHead>
-              <TableHead>Cidade</TableHead>
+              <TableHead>Localização</TableHead>
               <TableHead>Plano</TableHead>
               <TableHead>Classificação</TableHead>
               <TableHead>Status</TableHead>
@@ -132,7 +132,12 @@ export const LeadsTable = ({ leads, onUpdateStatus, currentUser }: LeadsTablePro
                     </div>
                   </div>
                 </TableCell>
-                <TableCell>{lead.cidade}</TableCell>
+                <TableCell>
+                  <div>
+                    <div className="text-sm">{lead.cidade}</div>
+                    <div className="text-xs text-gray-500">{lead.bairro || 'Não informado'}</div>
+                  </div>
+                </TableCell>
                 <TableCell>
                   <div>
                     <div className="text-sm">{lead.tipoPlano}</div>

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -18,7 +17,7 @@ interface Lead {
   email: string;
   telefone: string;
   idade: string;
-  renda: string;
+  bairro: string;
   cidade: string;
   tipoPlano: string;
   urgencia: string;
@@ -121,7 +120,7 @@ export const LeadHistory = ({ currentUser }: LeadHistoryProps) => {
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <MapPin className="h-3 w-3 text-gray-400" />
-                    {lead.cidade}
+                    {lead.cidade} - {lead.bairro || 'Bairro não informado'}
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -130,9 +129,6 @@ export const LeadHistory = ({ currentUser }: LeadHistoryProps) => {
                   </div>
                   <div className="text-sm">
                     <span className="font-medium">Urgência:</span> {lead.urgencia}
-                  </div>
-                  <div className="text-sm">
-                    <span className="font-medium">Renda:</span> R$ {lead.renda}
                   </div>
                 </div>
               </div>

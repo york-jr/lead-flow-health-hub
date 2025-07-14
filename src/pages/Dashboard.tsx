@@ -18,6 +18,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { LeadsTable } from "@/components/dashboard/LeadsTable";
 import { LeadHistory } from "@/components/dashboard/LeadHistory";
+import { DashboardCharts } from "@/components/dashboard/DashboardCharts";
 
 interface Lead {
   id: string;
@@ -25,7 +26,7 @@ interface Lead {
   email: string;
   telefone: string;
   idade: string;
-  renda: string;
+  bairro: string;
   cidade: string;
   tipoPlano: string;
   urgencia: string;
@@ -150,14 +151,14 @@ const Dashboard = () => {
 
   const handleExportLeads = () => {
     const csvContent = [
-      ['Nome', 'Email', 'Telefone', 'Idade', 'Cidade', 'Renda', 'Tipo Plano', 'Urgência', 'Classificação', 'Status', 'Data Captura'],
+      ['Nome', 'Email', 'Telefone', 'Idade', 'Cidade', 'Bairro', 'Tipo Plano', 'Urgência', 'Classificação', 'Status', 'Data Captura'],
       ...filteredLeads.map(lead => [
         lead.nome,
         lead.email,
         lead.telefone,
         lead.idade,
         lead.cidade,
-        lead.renda,
+        lead.bairro || '',
         lead.tipoPlano,
         lead.urgencia,
         lead.classificacao,
@@ -248,6 +249,9 @@ const Dashboard = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Gráficos */}
+        <DashboardCharts leads={leads} />
 
         {/* Filters */}
         <Card className="mb-8">
