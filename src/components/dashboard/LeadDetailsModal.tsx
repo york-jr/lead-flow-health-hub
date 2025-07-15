@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import {
   Dialog,
@@ -23,23 +22,7 @@ import {
   MessageSquare,
   Clock
 } from "lucide-react";
-
-interface Lead {
-  id: string;
-  nome: string;
-  email: string;
-  telefone: string;
-  idade: string;
-  renda: string;
-  cidade: string;
-  tipoPlano: string;
-  urgencia: string;
-  comentarios: string;
-  classificacao: "quente" | "morno" | "frio";
-  dataCaptura: string;
-  status?: "novo" | "contatado" | "interesse" | "fechado" | "perdido";
-  responsavel?: string;
-}
+import { Lead } from "@/types/lead";
 
 interface LeadDetailsModalProps {
   lead: Lead | null;
@@ -133,10 +116,12 @@ export const LeadDetailsModal = ({
                 <Calendar className="h-4 w-4 text-gray-500" />
                 <span>{lead.idade} anos</span>
               </div>
-              <div className="flex items-center gap-2">
-                <DollarSign className="h-4 w-4 text-gray-500" />
-                <span>R$ {lead.renda}</span>
-              </div>
+              {lead.renda && (
+                <div className="flex items-center gap-2">
+                  <DollarSign className="h-4 w-4 text-gray-500" />
+                  <span>R$ {lead.renda}</span>
+                </div>
+              )}
             </CardContent>
           </Card>
 

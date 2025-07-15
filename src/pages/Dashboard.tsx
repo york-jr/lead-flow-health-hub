@@ -18,23 +18,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { LeadsTable } from "@/components/dashboard/LeadsTable";
 import { LeadHistory } from "@/components/dashboard/LeadHistory";
-
-interface Lead {
-  id: string;
-  nome: string;
-  email: string;
-  telefone: string;
-  idade: string;
-  bairro: string;
-  cidade: string;
-  tipoPlano: string;
-  urgencia: string;
-  comentarios: string;
-  classificacao: "quente" | "morno" | "frio";
-  dataCaptura: string;
-  status?: "novo" | "contatado" | "interesse" | "fechado" | "perdido";
-  responsavel?: string;
-}
+import { Lead } from "@/types/lead";
 
 const Dashboard = () => {
   const [leads, setLeads] = useState<Lead[]>([]);
