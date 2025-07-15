@@ -13,7 +13,8 @@ import {
   LogOut,
   Search,
   Filter,
-  Download
+  Download,
+  History
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { LeadsTable } from "@/components/dashboard/LeadsTable";
@@ -28,6 +29,7 @@ const Dashboard = () => {
   const [filterClassificacao, setFilterClassificacao] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
   const [corretorHistoryStats, setCorretorHistoryStats] = useState<Record<string, number>>({});
+  const [myHistoryCount, setMyHistoryCount] = useState(0);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -37,7 +39,8 @@ const Dashboard = () => {
       navigate("/login");
       return;
     }
-    setCurrentUser(JSON.parse(user));
+    const currentUserData = JSON.parse(user);
+    setCurrentUser(currentUserData);
 
     const storedLeads = JSON.parse(localStorage.getItem("leads") || "[]");
     const leadsWithStatus: Lead[] = storedLeads.map((lead: any) => ({
@@ -46,6 +49,10 @@ const Dashboard = () => {
     }));
     setLeads(leadsWithStatus);
     setFilteredLeads(leadsWithStatus);
+
+    // Calcular meu histórico pessoal
+    const myHistory = JSON.parse(localStorage.getItem(`lead_history_${currentUserData.id}`) || "[]");
+    setMyHistoryCount(myHistory.length);
 
     // Calcular estatísticas do histórico de cada corretor
     calculateCorretorHistoryStats();
@@ -110,6 +117,9 @@ const Dashboard = () => {
         const currentHistory = JSON.parse(localStorage.getItem(`lead_history_${currentUser.id}`) || "[]");
         const newHistory = [updatedLead, ...currentHistory];
         localStorage.setItem(`lead_history_${currentUser.id}`, JSON.stringify(newHistory));
+        
+        // Atualizar contador do meu histórico
+        setMyHistoryCount(newHistory.length);
         
         // Remover da lista principal de leads
         const leadsWithoutUpdated = leads.filter(lead => lead.id !== leadId);
@@ -218,7 +228,7 @@ const Dashboard = () => {
 
       <div className="container mx-auto px-4 py-8">
         {/* Stats Cards */}
-        <div className="grid md:grid-cols-4 gap-6 mb-8">
+        <div className="grid md:grid-cols-5 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total de Leads</CardTitle>
@@ -226,6 +236,17 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{leads.length}</div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Meu Histórico</CardTitle>
+              <History className="h-4 w-4 text-blue-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-blue-600">{myHistoryCount}</div>
+              <p className="text-xs text-muted-foreground">Leads processados</p>
             </CardContent>
           </Card>
 
