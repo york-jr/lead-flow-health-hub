@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,15 +10,17 @@ import {
   Mail,
   MapPin,
   Calendar,
-  UserCheck
+  UserCheck,
+  Undo2
 } from "lucide-react";
 import { Lead } from "@/types/lead";
 
 interface LeadHistoryProps {
   currentUser: any;
+  onReturnToActive?: (lead: Lead) => void;
 }
 
-export const LeadHistory = ({ currentUser }: LeadHistoryProps) => {
+export const LeadHistory = ({ currentUser, onReturnToActive }: LeadHistoryProps) => {
   const [userHistory, setUserHistory] = useState<Lead[]>([]);
 
   // Carregar histórico do usuário atual
@@ -41,6 +44,26 @@ export const LeadHistory = ({ currentUser }: LeadHistoryProps) => {
       case "morno": return "bg-yellow-100 text-yellow-800 border-yellow-200";
       case "frio": return "bg-blue-100 text-blue-800 border-blue-200";
       default: return "bg-gray-100 text-gray-800 border-gray-200";
+    }
+  };
+
+  const handleReturnToActive = (lead: Lead) => {
+    // Atualizar o lead para status "novo" e remover responsável
+    const updatedLead = {
+      ...lead,
+      status: "novo" as Lead["status"],
+      responsavel: undefined,
+      dataStatusChange: new Date().toISOString()
+    };
+
+    // Remover do histórico do usuário
+    const updatedHistory = userHistory.filter(h => h.id !== lead.id);
+    setUserHistory(updatedHistory);
+    localStorage.setItem(`lead_history_${currentUser?.id}`, JSON.stringify(updatedHistory));
+
+    // Chamar callback para adicionar de volta aos leads ativos
+    if (onReturnToActive) {
+      onReturnToActive(updatedLead);
     }
   };
 
@@ -172,6 +195,15 @@ export const LeadHistory = ({ currentUser }: LeadHistoryProps) => {
                 >
                   <Mail className="h-3 w-3 mr-1" />
                   Email
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleReturnToActive(lead)}
+                  className="text-orange-600 border-orange-200 hover:bg-orange-50"
+                >
+                  <Undo2 className="h-3 w-3 mr-1" />
+                  Devolver
                 </Button>
               </div>
             </div>

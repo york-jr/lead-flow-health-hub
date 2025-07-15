@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -136,6 +135,22 @@ const Dashboard = () => {
     toast({
       title: "Status atualizado",
       description: "O status do lead foi atualizado com sucesso.",
+    });
+  };
+
+  const handleReturnToActive = (lead: Lead) => {
+    // Adicionar o lead de volta à lista de leads ativos
+    const updatedLeads = [...leads, lead];
+    setLeads(updatedLeads);
+    localStorage.setItem("leads", JSON.stringify(updatedLeads));
+    
+    // Atualizar a contagem do histórico
+    const userHistory = JSON.parse(localStorage.getItem(`lead_history_${currentUser?.id}`) || "[]");
+    setUserHistoryCount(userHistory.length);
+    
+    toast({
+      title: "Lead devolvido",
+      description: `O lead ${lead.nome} foi devolvido para a lista de leads ativos.`,
     });
   };
 
@@ -347,7 +362,10 @@ const Dashboard = () => {
           </TabsContent>
 
           <TabsContent value="history" className="space-y-0">
-            <LeadHistory currentUser={currentUser} />
+            <LeadHistory 
+              currentUser={currentUser} 
+              onReturnToActive={handleReturnToActive}
+            />
           </TabsContent>
         </Tabs>
       </div>
