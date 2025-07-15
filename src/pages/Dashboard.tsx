@@ -14,7 +14,8 @@ import {
   LogOut,
   Search,
   Filter,
-  Download
+  Download,
+  History
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { LeadsTable } from "@/components/dashboard/LeadsTable";
@@ -25,6 +26,7 @@ const Dashboard = () => {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [filteredLeads, setFilteredLeads] = useState<Lead[]>([]);
   const [currentUser, setCurrentUser] = useState<any>(null);
+  const [userHistoryCount, setUserHistoryCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterClassificacao, setFilterClassificacao] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
@@ -47,6 +49,10 @@ const Dashboard = () => {
     }));
     setLeads(leadsWithStatus);
     setFilteredLeads(leadsWithStatus);
+
+    // Carregar contagem do histórico do usuário
+    const userHistory = JSON.parse(localStorage.getItem(`lead_history_${currentUserData.id}`) || "[]");
+    setUserHistoryCount(userHistory.length);
   }, [navigate]);
 
   useEffect(() => {
@@ -95,6 +101,9 @@ const Dashboard = () => {
         const currentHistory = JSON.parse(localStorage.getItem(`lead_history_${currentUser.id}`) || "[]");
         const newHistory = [updatedLead, ...currentHistory];
         localStorage.setItem(`lead_history_${currentUser.id}`, JSON.stringify(newHistory));
+        
+        // Atualizar a contagem do histórico
+        setUserHistoryCount(newHistory.length);
         
         // Remover da lista principal de leads
         const leadsWithoutUpdated = leads.filter(lead => lead.id !== leadId);
@@ -203,7 +212,7 @@ const Dashboard = () => {
 
       <div className="container mx-auto px-4 py-8">
         {/* Stats Cards */}
-        <div className="grid md:grid-cols-4 gap-6 mb-8">
+        <div className="grid md:grid-cols-5 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total de Leads</CardTitle>
@@ -241,6 +250,16 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-green-600">{leadsPorStatus.fechado}</div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Meu Histórico</CardTitle>
+              <History className="h-4 w-4 text-purple-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-purple-600">{userHistoryCount}</div>
             </CardContent>
           </Card>
         </div>
