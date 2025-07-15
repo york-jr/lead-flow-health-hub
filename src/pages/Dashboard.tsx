@@ -43,6 +43,7 @@ const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterClassificacao, setFilterClassificacao] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
+  const [corretorHistoryStats, setCorretorHistoryStats] = useState<Record<string, number>>({});
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -61,7 +62,23 @@ const Dashboard = () => {
     }));
     setLeads(leadsWithStatus);
     setFilteredLeads(leadsWithStatus);
+
+    // Calcular estatísticas do histórico de cada corretor
+    calculateCorretorHistoryStats();
   }, [navigate]);
+
+  const calculateCorretorHistoryStats = () => {
+    // Buscar todos os usuários registrados
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    const stats: Record<string, number> = {};
+
+    users.forEach((user: any) => {
+      const userHistory = JSON.parse(localStorage.getItem(`lead_history_${user.id}`) || "[]");
+      stats[user.nome] = userHistory.length;
+    });
+
+    setCorretorHistoryStats(stats);
+  };
 
   useEffect(() => {
     let filtered = leads;
@@ -258,6 +275,42 @@ const Dashboard = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Corretor History Stats */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Users className="h-5 w-5" />
+              Histórico por Corretor
+            </CardTitle>
+            <CardDescription>
+              Quantidade de leads no histórico pessoal de cada corretor
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-4 gap-4">
+              {Object.entries(corretorHistoryStats).map(([corretor, count]) => (
+                <div key={corretor} className="flex items-center justify-between p-3 border rounded-lg bg-white/50">
+                  <div>
+                    <div className="font-medium text-sm">{corretor}</div>
+                    <div className="text-xs text-gray-500">
+                      {corretor === currentUser.nome ? "Você" : "Corretor"}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-lg font-bold text-blue-600">{count}</div>
+                    <div className="text-xs text-gray-500">leads</div>
+                  </div>
+                </div>
+              ))}
+              {Object.keys(corretorHistoryStats).length === 0 && (
+                <div className="col-span-4 text-center py-4 text-gray-500">
+                  Nenhum corretor com histórico encontrado
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Filters */}
         <Card className="mb-8">
