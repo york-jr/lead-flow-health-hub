@@ -43,6 +43,7 @@ interface Lead {
   status?: "novo" | "contatado" | "interesse" | "fechado" | "perdido";
   responsavel?: string;
   dataStatusChange?: string;
+  renda?: string;
 }
 
 interface LeadsTableProps {
@@ -86,6 +87,29 @@ export const LeadsTable = ({ leads, onUpdateStatus, currentUser }: LeadsTablePro
 
   const handleEmail = (email: string) => {
     window.open(`mailto:${email}`, '_blank');
+  };
+
+  const handleStatusUpdate = (leadId: string, newStatus: Lead["status"]) => {
+    onUpdateStatus(leadId, newStatus, currentUser?.nome);
+    
+    // Mover para histórico se status for relevante
+    if (newStatus && ['contatado', 'interesse', 'fechado'].includes(newStatus)) {
+      const lead = leads.find(l => l.id === leadId);
+      if (lead) {
+        const updatedLead = {
+          ...lead,
+          status: newStatus,
+          responsavel: currentUser?.nome,
+          dataStatusChange: new Date().toISOString()
+        };
+        
+        // Salvar no histórico do usuário
+        const userHistoryKey = `lead_history_${currentUser?.id}`;
+        const existingHistory = JSON.parse(localStorage.getItem(userHistoryKey) || "[]");
+        const updatedHistory = [updatedLead, ...existingHistory.filter((h: Lead) => h.id !== leadId)];
+        localStorage.setItem(userHistoryKey, JSON.stringify(updatedHistory));
+      }
+    }
   };
 
   if (leads.length === 0) {
@@ -153,7 +177,7 @@ export const LeadsTable = ({ leads, onUpdateStatus, currentUser }: LeadsTablePro
                 <TableCell>
                   <Select 
                     value={lead.status || "novo"} 
-                    onValueChange={(value) => onUpdateStatus(lead.id, value as Lead["status"])}
+                    onValueChange={(value) => handleStatusUpdate(lead.id, value as Lead["status"])}
                   >
                     <SelectTrigger className="w-32">
                       <SelectValue />
