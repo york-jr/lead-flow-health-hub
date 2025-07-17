@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -52,9 +51,10 @@ const Dashboard = () => {
     setLeads(leadsWithStatus);
     setFilteredLeads(leadsWithStatus);
 
-    // Carregar contagem do histórico do usuário
+    // Carregar contagem do histórico do usuário (excluindo fechados)
     const userHistory = JSON.parse(localStorage.getItem(`lead_history_${currentUserData.id}`) || "[]");
-    setUserHistoryCount(userHistory.length);
+    const historyWithoutClosed = userHistory.filter((lead: Lead) => lead.status !== "fechado");
+    setUserHistoryCount(historyWithoutClosed.length);
     
     // Contar leads com status "fechado" do usuário atual
     const userConversions = userHistory.filter((lead: Lead) => lead.status === "fechado");
@@ -394,7 +394,6 @@ const Dashboard = () => {
               <CardContent>
                 <ConversionsTable
                   currentUser={currentUser}
-                  onReturnToActive={handleReturnToActive}
                 />
               </CardContent>
             </Card>

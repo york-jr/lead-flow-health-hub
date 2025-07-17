@@ -14,16 +14,15 @@ import {
   Phone, 
   Mail, 
   Calendar,
-  Undo2
+  ClipboardList
 } from "lucide-react";
 import { Lead } from "@/types/lead";
 
 interface ConversionsTableProps {
   currentUser: any;
-  onReturnToActive?: (lead: Lead) => void;
 }
 
-export const ConversionsTable = ({ currentUser, onReturnToActive }: ConversionsTableProps) => {
+export const ConversionsTable = ({ currentUser }: ConversionsTableProps) => {
   const [conversions, setConversions] = useState<Lead[]>([]);
 
   // Carregar conversões do usuário atual
@@ -44,37 +43,17 @@ export const ConversionsTable = ({ currentUser, onReturnToActive }: ConversionsT
     }
   };
 
-  const handleReturnToActive = (lead: Lead) => {
-    // Atualizar o lead para status "novo" e remover responsável
-    const updatedLead = {
-      ...lead,
-      status: "novo" as Lead["status"],
-      responsavel: undefined,
-      dataStatusChange: new Date().toISOString()
-    };
-
-    // Remover do histórico do usuário
-    if (currentUser?.id) {
-      const userHistory = JSON.parse(localStorage.getItem(`lead_history_${currentUser.id}`) || "[]");
-      const updatedHistory = userHistory.filter((h: Lead) => h.id !== lead.id);
-      localStorage.setItem(`lead_history_${currentUser.id}`, JSON.stringify(updatedHistory));
-      
-      // Atualizar a lista local de conversões
-      setConversions(conversions.filter(c => c.id !== lead.id));
-    }
-
-    // Chamar callback para adicionar de volta aos leads ativos
-    if (onReturnToActive) {
-      onReturnToActive(updatedLead);
-    }
-  };
-
   const handleCall = (telefone: string) => {
     window.open(`tel:${telefone}`, '_self');
   };
 
   const handleEmail = (email: string) => {
     window.open(`mailto:${email}`, '_blank');
+  };
+
+  const handleReview = (lead: Lead) => {
+    // Por enquanto apenas mostra um console.log
+    console.log("Revisando lead:", lead);
   };
 
   if (conversions.length === 0) {
@@ -157,11 +136,11 @@ export const ConversionsTable = ({ currentUser, onReturnToActive }: ConversionsT
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => handleReturnToActive(lead)}
-                    className="text-orange-600 border-orange-200 hover:bg-orange-50"
+                    onClick={() => handleReview(lead)}
+                    className="text-green-600 border-green-200 hover:bg-green-50"
                   >
-                    <Undo2 className="h-4 w-4 mr-1" />
-                    Devolver
+                    <ClipboardList className="h-4 w-4 mr-1" />
+                    Revisar
                   </Button>
                 </div>
               </TableCell>
