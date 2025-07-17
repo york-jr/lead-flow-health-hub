@@ -53,7 +53,10 @@ const Dashboard = () => {
 
     // Carregar contagem do histórico do usuário (excluindo fechados)
     const userHistory = JSON.parse(localStorage.getItem(`lead_history_${currentUserData.id}`) || "[]");
-    const historyWithoutClosed = userHistory.filter((lead: Lead) => lead.status !== "fechado");
+    const historyWithoutClosed = userHistory.filter((lead: Lead) => 
+      lead.status !== "fechado" && 
+      lead.status !== "novo"
+    );
     setUserHistoryCount(historyWithoutClosed.length);
     
     // Contar leads com status "fechado" do usuário atual
