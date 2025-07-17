@@ -23,10 +23,11 @@ interface LeadHistoryProps {
 export const LeadHistory = ({ currentUser, onReturnToActive }: LeadHistoryProps) => {
   const [userHistory, setUserHistory] = useState<Lead[]>([]);
 
-  // Carregar histórico do usuário atual
+  // Carregar histórico do usuário atual (excluindo status "fechado")
   useState(() => {
     const history = JSON.parse(localStorage.getItem(`lead_history_${currentUser?.id}`) || "[]");
-    setUserHistory(history);
+    const filteredHistory = history.filter((lead: Lead) => lead.status !== "fechado");
+    setUserHistory(filteredHistory);
   });
 
   const getStatusColor = (status: string) => {
