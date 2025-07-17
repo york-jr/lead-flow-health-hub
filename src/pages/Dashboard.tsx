@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,12 +21,14 @@ import { useNavigate } from "react-router-dom";
 import { LeadsTable } from "@/components/dashboard/LeadsTable";
 import { LeadHistory } from "@/components/dashboard/LeadHistory";
 import { Lead } from "@/types/lead";
+import { ConversionsTable } from "@/components/dashboard/ConversionsTable";
 
 const Dashboard = () => {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [filteredLeads, setFilteredLeads] = useState<Lead[]>([]);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [userHistoryCount, setUserHistoryCount] = useState(0);
+  const [userConversionsCount, setUserConversionsCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterClassificacao, setFilterClassificacao] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
@@ -52,6 +55,10 @@ const Dashboard = () => {
     // Carregar contagem do histórico do usuário
     const userHistory = JSON.parse(localStorage.getItem(`lead_history_${currentUserData.id}`) || "[]");
     setUserHistoryCount(userHistory.length);
+    
+    // Contar leads com status "fechado" do usuário atual
+    const userConversions = userHistory.filter((lead: Lead) => lead.status === "fechado");
+    setUserConversionsCount(userConversions.length);
   }, [navigate]);
 
   useEffect(() => {
@@ -98,11 +105,17 @@ const Dashboard = () => {
 
         // Adicionar ao histórico do usuário atual
         const currentHistory = JSON.parse(localStorage.getItem(`lead_history_${currentUser.id}`) || "[]");
-        const newHistory = [updatedLead, ...currentHistory];
+        const newHistory = [updatedLead, ...currentHistory.filter((h: Lead) => h.id !== leadId)];
         localStorage.setItem(`lead_history_${currentUser.id}`, JSON.stringify(newHistory));
         
         // Atualizar a contagem do histórico
         setUserHistoryCount(newHistory.length);
+        
+        // Atualizar contagem de conversões se o status for "fechado"
+        if (newStatus === "fechado") {
+          const conversions = newHistory.filter((lead: Lead) => lead.status === "fechado");
+          setUserConversionsCount(conversions.length);
+        }
         
         // Remover da lista principal de leads
         const leadsWithoutUpdated = leads.filter(lead => lead.id !== leadId);
@@ -147,6 +160,14 @@ const Dashboard = () => {
     // Atualizar a contagem do histórico
     const userHistory = JSON.parse(localStorage.getItem(`lead_history_${currentUser?.id}`) || "[]");
     setUserHistoryCount(userHistory.length);
+    
+    // Atualizar contagem de conversões se o lead era uma conversão
+    if (lead.status === "fechado") {
+      const conversions = userHistory.filter((item: Lead) => 
+        item.status === "fechado" && item.id !== lead.id
+      );
+      setUserConversionsCount(conversions.length);
+    }
     
     toast({
       title: "Lead devolvido",
@@ -264,7 +285,7 @@ const Dashboard = () => {
               <TrendingUp className="h-4 w-4 text-green-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">{leadsPorStatus.fechado}</div>
+              <div className="text-2xl font-bold text-green-600">{userConversionsCount}</div>
             </CardContent>
           </Card>
 
@@ -338,8 +359,9 @@ const Dashboard = () => {
         </Card>
 
         <Tabs defaultValue="leads" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="leads">Leads Ativos</TabsTrigger>
+            <TabsTrigger value="conversions">Conversões</TabsTrigger>
             <TabsTrigger value="history">Meu Histórico</TabsTrigger>
           </TabsList>
 
@@ -356,6 +378,23 @@ const Dashboard = () => {
                   leads={filteredLeads}
                   onUpdateStatus={updateLeadStatus}
                   currentUser={currentUser}
+                />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="conversions" className="space-y-0">
+            <Card>
+              <CardHeader>
+                <CardTitle>Minhas Conversões</CardTitle>
+                <CardDescription>
+                  Visualize todos os seus leads convertidos em clientes
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ConversionsTable
+                  currentUser={currentUser}
+                  onReturnToActive={handleReturnToActive}
                 />
               </CardContent>
             </Card>
