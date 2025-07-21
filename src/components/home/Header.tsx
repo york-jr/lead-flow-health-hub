@@ -15,8 +15,8 @@ export const Header = () => {
             HealthLead Pro
           </span>
         </div>
-        <Button onClick={() => navigate("/login")} variant="outline" className="border-orange-200 hover:bg-orange-50">
-          Área do Cliente
+        <Button onClick={() => navigate("/login")} variant="outline" className="border-slate-200 hover:bg-slate-50">
+          Área do Corretor
         </Button>
       </div>
     </header>
