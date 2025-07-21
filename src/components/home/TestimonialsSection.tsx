@@ -5,7 +5,7 @@ export const TestimonialsSection = () => {
   return (
     <section className="py-16 px-4 bg-gray-50">
       <div className="container mx-auto max-w-6xl">
-        <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-blue-600 via-orange-500 to-green-600 bg-clip-text text-transparent">
+        <h2 className="text-4xl font-bold text-center mb-12 text-slate-800">
           O que nossos clientes falam
         </h2>
         

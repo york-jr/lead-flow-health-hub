@@ -3,7 +3,7 @@ import { Phone, Mail, Star } from "lucide-react";
 
 export const FeaturesSection = () => {
   return (
-    <section className="py-16 px-4 bg-gradient-to-r from-blue-600 via-orange-500 to-green-600">
+    <section className="py-16 px-4 bg-slate-800">
       <div className="container mx-auto text-center text-white">
         <h2 className="text-4xl font-bold mb-4">Por que escolher nosso serviço?</h2>
         <p className="text-xl mb-12 text-white/90">Mais de 15 anos conectando pessoas aos melhores planos de saúde</p>

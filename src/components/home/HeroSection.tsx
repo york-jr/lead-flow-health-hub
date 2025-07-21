@@ -5,7 +5,7 @@ export const HeroSection = () => {
   return (
     <section className="py-20 px-4">
       <div className="container mx-auto text-center max-w-5xl">
-        <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-orange-500 to-green-600 bg-clip-text text-transparent">
+        <h1 className="text-6xl font-bold mb-6 text-slate-800">
           Encontre o Plano de Saúde Ideal para Você e Sua Família
         </h1>
         <p className="text-xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed">
@@ -19,7 +19,7 @@ export const HeroSection = () => {
         </p>
         
         <div className="grid md:grid-cols-3 gap-8 mb-16">
-          <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 p-8 text-white transform hover:scale-105 transition-all duration-300">
+          <div className="group relative overflow-hidden rounded-2xl bg-blue-600 p-8 text-white transform hover:scale-105 transition-all duration-300">
             <div className="absolute inset-0 bg-black/10"></div>
             <div className="relative z-10">
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/20 flex items-center justify-center">
@@ -30,7 +30,7 @@ export const HeroSection = () => {
             </div>
           </div>
 
-          <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 p-8 text-white transform hover:scale-105 transition-all duration-300">
+          <div className="group relative overflow-hidden rounded-2xl bg-orange-600 p-8 text-white transform hover:scale-105 transition-all duration-300">
             <div className="absolute inset-0 bg-black/10"></div>
             <div className="relative z-10">
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/20 flex items-center justify-center">
@@ -41,7 +41,7 @@ export const HeroSection = () => {
             </div>
           </div>
 
-          <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-green-500 to-green-600 p-8 text-white transform hover:scale-105 transition-all duration-300">
+          <div className="group relative overflow-hidden rounded-2xl bg-green-600 p-8 text-white transform hover:scale-105 transition-all duration-300">
             <div className="absolute inset-0 bg-black/10"></div>
             <div className="relative z-10">
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/20 flex items-center justify-center">

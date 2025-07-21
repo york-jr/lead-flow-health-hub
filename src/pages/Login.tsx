@@ -102,12 +102,12 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center space-x-2 mb-4">
             <Shield className="h-10 w-10 text-blue-600" />
-            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+            <span className="text-2xl font-bold text-slate-800">
               HealthLead Pro
             </span>
           </div>
@@ -179,7 +179,7 @@ const Login = () => {
 
                   <Button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700"
+                    className="w-full bg-slate-800 hover:bg-slate-700"
                     disabled={isLoading}
                   >
                     {isLoading ? "Entrando..." : "Entrar"}
@@ -266,7 +266,7 @@ const Login = () => {
 
                   <Button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700"
+                    className="w-full bg-slate-800 hover:bg-slate-700"
                     disabled={isLoading}
                   >
                     {isLoading ? "Criando conta..." : "Criar Conta"}

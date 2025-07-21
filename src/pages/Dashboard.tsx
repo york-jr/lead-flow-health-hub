@@ -227,13 +227,13 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+    <div className="min-h-screen bg-slate-50">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-sm shadow-sm border-b">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <Shield className="h-8 w-8 text-blue-600" />
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+            <span className="text-xl font-bold text-slate-800">
               HealthLead Pro
             </span>
           </div>

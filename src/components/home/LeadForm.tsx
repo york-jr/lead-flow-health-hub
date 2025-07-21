@@ -127,7 +127,7 @@ export const LeadForm = () => {
     <section className="py-16 px-4">
       <div className="container mx-auto max-w-2xl">
         <Card className="shadow-2xl border-0 bg-white/95 backdrop-blur-sm">
-          <CardHeader className="text-center bg-gradient-to-r from-blue-600 via-orange-500 to-green-600 text-white rounded-t-lg">
+          <CardHeader className="text-center bg-slate-800 text-white rounded-t-lg">
             <CardTitle className="text-3xl font-bold">
               Receba sua Cotação Gratuita
             </CardTitle>
@@ -265,7 +265,7 @@ export const LeadForm = () => {
 
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-blue-600 via-orange-500 to-green-600 hover:from-blue-700 hover:via-orange-600 hover:to-green-700 text-white py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                className="w-full bg-slate-800 hover:bg-slate-700 text-white py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
                 disabled={isLoading}
               >
                 {isLoading ? "Processando..." : "🚀 Receber Cotação Gratuita"}
