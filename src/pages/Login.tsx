@@ -57,6 +57,22 @@ const Login = () => {
     }
   };
 
+  const handleForgotPassword = () => {
+    if (!loginData.email) {
+      toast({
+        title: "E-mail necessário",
+        description: "Digite seu e-mail para recuperar a senha.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: "E-mail enviado!",
+      description: "Verifique sua caixa de entrada para redefinir sua senha.",
+    });
+  };
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -123,7 +139,7 @@ const Login = () => {
         <Card className="shadow-2xl border-0 bg-white/90 backdrop-blur-sm">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold text-gray-800">
-              Área do Cliente
+              Área do Corretor
             </CardTitle>
             <CardDescription>
               Acesse sua conta ou crie uma nova
@@ -175,6 +191,17 @@ const Login = () => {
                         )}
                       </Button>
                     </div>
+                  </div>
+
+                  <div className="text-center">
+                    <Button
+                      type="button"
+                      variant="link"
+                      onClick={handleForgotPassword}
+                      className="text-sm text-blue-600 hover:text-blue-700 p-0"
+                    >
+                      Esqueci minha senha
+                    </Button>
                   </div>
 
                   <Button
